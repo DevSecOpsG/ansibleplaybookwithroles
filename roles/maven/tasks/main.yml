@@ -1,0 +1,25 @@
+---
+- name: Download Maven {{maven_version}}
+  get_url:
+    url: http://www-eu.apache.org/dist/maven/maven-3/{{maven_version}}/binaries/apache-maven-{{maven_version}}-bin.tar.gz
+    dest: /tmp/
+
+- name: Install Maven {{maven_version}}
+  become: true
+  unarchive:
+    src: /tmp/apache-maven-{{maven_version}}-bin.tar.gz
+    dest: /opt/
+
+- name: Create symlink in /opt/ for Maven
+  become: true
+  file:
+    src: /opt/apache-maven-{{maven_version}}
+    dest: /opt/maven
+    state: link
+
+- name: Create symlink in /usr/local/bin/ for Maven
+  become: true
+  file:
+    src: /opt/maven/bin/mvn
+    dest: /usr/local/bin/mvn
+    state: link

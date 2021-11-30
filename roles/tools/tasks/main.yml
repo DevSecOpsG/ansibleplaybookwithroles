@@ -1,0 +1,24 @@
+---
+- name: Install vim
+  become: true
+  apt:
+    name: vim
+    state: latest
+
+- name: Install curl
+  become: true
+  apt:
+    name: curl
+    state: latest
+
+- name: Install wget
+  become: true
+  apt:
+    name: wget
+    state: latest
+
+- name: Install gnome-tweak-tool
+  become: true
+  apt:
+    name: gnome-tweak-tool
+    state: latest

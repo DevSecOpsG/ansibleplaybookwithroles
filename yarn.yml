@@ -1,0 +1,10 @@
+---
+- name: Install Tools
+  include: tools.yml
+
+- name: Install Node
+  include: node.yml
+
+- hosts: localhost
+  roles:
+    - yarn

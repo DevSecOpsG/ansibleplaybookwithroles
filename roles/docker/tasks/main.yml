@@ -1,0 +1,35 @@
+---
+- name: Download container.io
+  get_url:
+    url: 'https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/containerd.io_1.2.6-3_amd64.deb'
+    dest: /tmp/
+    
+- name: Download docker-ce-cli
+  get_url:
+    url: 'https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce-cli_19.03.8~3-0~ubuntu-bionic_amd64.deb'
+    dest: /tmp/
+- name: Download docker-ce
+  get_url:
+    url: 'https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce_19.03.8~3-0~ubuntu-bionic_amd64.deb'
+    dest: /tmp/
+
+- name: Install container.io
+  become: true
+  apt:
+    deb: /tmp/containerd.io_1.2.6-3_amd64.deb
+- name: Install docker-ce-cli
+  become: true
+  apt:
+    deb: /tmp/docker-ce-cli_19.03.8~3-0~ubuntu-bionic_amd64.deb
+- name: Install docker-ce
+  become: true
+  apt:
+    deb: /tmp/docker-ce_19.03.8~3-0~ubuntu-bionic_amd64.deb
+
+- name: Add to Docker group
+  become: true
+  user:
+    name: '{{ansible_user}}'
+    shell: /bin/bash
+    groups: docker
+    append: yes

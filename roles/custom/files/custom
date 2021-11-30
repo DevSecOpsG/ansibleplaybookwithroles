@@ -1,0 +1,156 @@
+#!/bin/bash
+
+##################################################
+# Spotify
+##################################################
+
+alias spotify="/usr/share/spotify/spotify --force-device-scale-factor=2"
+
+##################################################
+# Gatling
+##################################################
+
+export GATLING_HOME=/home/pgrimaud/app/gatling
+
+##################################################
+# OpenShift
+##################################################
+
+export PATH="$HOME/app/openshift:$PATH"
+
+##################################################
+# zsh-autosuggestions
+##################################################
+
+source "$HOME"/projects/config/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+##################################################
+# zsh and spaceship
+##################################################
+
+ZSH_THEME="spaceship"
+
+source "$HOME/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
+SPACESHIP_TIME_SHOW=true
+SPACESHIP_BATTERY_SHOW=false
+SPACESHIP_PACKAGE_SHOW=false
+SPACESHIP_NODE_SHOW=false
+SPACESHIP_DOCKER_SHOW=false
+SPACESHIP_KUBECONTEXT_SHOW=false
+SPACESHIP_DIR_TRUNC_REPO=false
+
+##################################################
+# tilix
+##################################################
+
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+  source /etc/profile.d/vte.sh
+fi
+
+##################################################
+# yarn
+##################################################
+
+export PATH="$HOME/.yarn/bin:$PATH"
+export PATH="$PATH:`yarn global bin`:$HOME/.config/yarn/global/node_modules/.bin"
+
+##################################################
+# Maven
+##################################################
+
+export M2_HOME=/opt/maven
+export PATH=${M2_HOME}/bin:${PATH}
+
+##################################################
+# alias
+##################################################
+alias cl="clear"
+
+alias pack="mvn clean verify -DskipTests"
+alias packt="mvn clean verify"
+alias packp="mvn clean verify -Pprod -DskipTests"
+alias packpt="mvn clean verify -Pprod"
+
+alias java1="java -Xmx256m -jar target/*.jar"
+alias java2="java -Xmx512m -jar target/*.jar"
+alias java3="java -Xmx768m -jar target/*.jar"
+alias java4="java -Xmx1024m -jar target/*.jar"
+
+alias java1d="java -Xmx256m -jar target/*.jar --spring.profiles.active=dev,swagger"
+alias java2d="java -Xmx512m -jar target/*.jar --spring.profiles.active=dev,swagger"
+alias java3d="java -Xmx768m -jar target/*.jar --spring.profiles.active=dev,swagger"
+alias java4d="java -Xmx1024m -jar target/*.jar --spring.profiles.active=dev,swagger"
+
+alias java1p="java -Xmx256m -jar target/*.jar --spring.profiles.active=prod,swagger"
+alias java2p="java -Xmx512m -jar target/*.jar --spring.profiles.active=prod,swagger"
+alias java3p="java -Xmx768m -jar target/*.jar --spring.profiles.active=prod,swagger"
+alias java4p="java -Xmx1024m -jar target/*.jar --spring.profiles.active=prod,swagger"
+
+alias dockerjekyll="docker run --rm --label=jekyll --volume=\$(pwd):/srv/jekyll -it -p 4000:4000 jekyll/jekyll:pages bundle exec jekyll serve"
+alias dockerjekyll2="docker run --rm --label=jekyll --volume=\$(pwd):/site -p 4000:4000 andredumas/github-pages serve --watch"
+
+# maven
+alias mvn1='mvn -Pdev -Drun.jvmArguments="-Xmx256m"'
+
+dps() {
+  docker ps -a
+}
+dpss() {
+  docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+}
+dstop() {
+  docker stop $(docker ps -q)
+}
+drm() {
+  docker rm $(docker ps -aq)
+}
+dstoprm() {
+  dstop
+  drm
+}
+dstats() {
+    docker stats $(docker ps --format={{.Names}})
+}
+alias ds='while true; do TEXT=$(docker stats --no-stream $(docker ps --format={{.Names}})); sleep 0.1; clear; echo "$TEXT"; done'
+
+drminone() {
+    docker rmi $(docker images | grep "^<none>" | awk '{print $3}')
+}
+dvol() {
+    docker volume ls
+}
+dvolrm() {
+    docker volume rm $(docker volume ls -qf dangling=true)
+}
+
+gitorigin() {
+    git fetch origin
+    git rebase origin/master
+}
+gitupstream() {
+    git fetch upstream
+    git rebase upstream/master
+}
+
+gac() {
+  git add .
+  git commit -m "$1"
+}
+
+mkcd() {
+    mkdir "$1" && cd "$1"
+}
+alias npmlink="npm link generator-jhipster"
+alias yarnlink="yarn link generator-jhipster"
+
+alias dcqlsh="docker run --name=cqlsh --network=host --volume=\$(pwd):/cql:ro --workdir=/cql --rm -it cassandra:2.1.15 cqlsh \$@"
+alias jhcd="cd ~/projects/jhipster/generator-jhipster"
+
+gsave() {
+  current_branch=$(git branch --show-current)
+  save_branch="save/$current_branch/$(date +'%Y%m%d_%H%M%S')"
+  git branch $save_branch
+  echo "*** save branch: $save_branch"
+}
+
+alias jhcc="java -Xmx256m -jar target/*.jar --spring.profiles.active=prod,swagger,consul"

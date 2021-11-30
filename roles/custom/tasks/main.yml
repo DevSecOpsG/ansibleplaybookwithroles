@@ -1,0 +1,12 @@
+---
+- name: Copy custom alias to $HOME/.{{ansible_user}}
+  copy:
+    src: custom
+    dest: $HOME/.{{ansible_user}}
+
+- name: Add source $HOME/.{{ansible_user}} to ~/.zshrc configuration
+  lineinfile:
+    path: $HOME/.zshrc
+    regexp: '^source \$HOME\/.{{ansible_user}}'
+    insertafter: '^# alias ohmyzsh="mate ~/.oh-my-zsh"'
+    line: 'source $HOME/.{{ansible_user}}'

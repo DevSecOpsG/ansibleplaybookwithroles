@@ -1,0 +1,29 @@
+---
+- name: Add repository ppa:git-core/ppa
+  become: true
+  apt_repository:
+    repo: 'ppa:git-core/ppa'
+    state: present
+
+- name: Update all packages to the latest version
+  become: true
+  apt:
+    upgrade: dist
+
+- name: Install git
+  become: true
+  apt:
+    name: git
+    state: latest
+
+- name: Config git user.name={{git_username}}
+  shell: git config --global user.name "{{git_username}}"
+  when:
+    - git_username is defined
+    - git_username != ""
+
+- name: Config git user.email={{git_email}}
+  shell: git config --global user.email "{{git_email}}"
+  when:
+    - git_email is defined
+    - git_email != ""

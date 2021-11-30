@@ -1,0 +1,57 @@
+---
+- name: Install zsh
+  become: true
+  apt:
+    name: zsh
+    state: latest
+
+- name: Install oh-my-zsh
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: ~/projects/config/oh-my-zsh
+    clone: yes
+    update: yes
+    force: true
+
+- name: Symlink for oh-my-zsh
+  file:
+    src: ~/projects/config/oh-my-zsh
+    dest: ~/.oh-my-zsh
+    state: link
+
+- name: Copy oh-my-zsh template
+  copy:
+    src: ~/.oh-my-zsh/templates/zshrc.zsh-template
+    dest: ~/.zshrc
+    force: true
+
+- name: Install fonts-powerline
+  become: true
+  apt:
+    name: fonts-powerline
+    state: latest
+
+- name: Install spaceship-prompt
+  git:
+    repo: https://github.com/denysdovhan/spaceship-prompt.git
+    dest: ~/projects/config/spaceship-prompt
+    clone: yes
+    update: yes
+
+- name: Create folder custom/themes
+  file:
+    path: ~/.oh-my-zsh/custom/themes/
+    state: directory
+
+- name: Symlink for spaceship-prompt
+  file:
+    src: ~/projects/config/spaceship-prompt/spaceship.zsh-theme
+    dest: ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
+    state: link
+
+- name: Install zsh-autosuggestions
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: ~/projects/config/zsh-autosuggestions
+    clone: yes
+    update: yes
